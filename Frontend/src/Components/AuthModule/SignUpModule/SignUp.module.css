@@ -344,24 +344,24 @@ input:not(:placeholder-shown) + .requirednm {
 
 @media (max-width: 480px) {
     .container {
-        justify-content: flex-start;
-        padding-top: 0.75rem;
-         padding-bottom: 1rem;
-        min-height: 100vh;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem,0;
+        max-height: 100vw;
+        overflow: hidden;
+        min-height: -webkit-fill-available;
     }
     
   
-    .container::before {
-        min-height:15px;
-        flex: 0 0 auto;
+   .container::before,
+    .container::after {
+        content: none; 
     }
-    /* .container::after {
-        min-height: 0;
-        flex: 0 0 auto;
-    } */
  .card {
     width: 94%;
     max-width: 360px;
+    max-height: 90vh;
+   
     height: auto;
     margin: 0;
     padding: 1rem 1rem;
