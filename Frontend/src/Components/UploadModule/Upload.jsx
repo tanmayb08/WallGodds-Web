@@ -9,15 +9,81 @@ import MobileIcon from "../GalleryModule/GallaryAssets/mobile-light.svg";
 import UploadIconImg from "../GalleryModule/GallaryAssets/upload-icon.png";
 
 const Upload = () => {
-    const [previewUrl, setPreviewUrl] = useState(null);
+    const [wallpapers, setWallpapers] = useState([]);
+    const [leftWallpapers, setLeftWallpapers] = useState([]);
+    const [rightWallpapers, setRightWallpapers] = useState([]);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
     const fileInputRef = useRef(null);
 
+    // Distribute wallpapers between columns based on height
+    const distributeWallpapers = useCallback((allWallpapers) => {
+        if (allWallpapers.length === 0) {
+            setLeftWallpapers([]);
+            setRightWallpapers([]);
+            return;
+        }
+
+        const left = [];
+        const right = [];
+        let leftHeight = 0;
+        let rightHeight = 0;
+
+        allWallpapers.forEach((wallpaper, index) => {
+            // Calculate proportional height based on aspect ratio
+            const proportionalHeight = wallpaper.height / wallpaper.width;
+
+            // First two wallpapers: left, then right
+            if (index === 0) {
+                left.push(wallpaper);
+                leftHeight += proportionalHeight;
+            } else if (index === 1) {
+                right.push(wallpaper);
+                rightHeight += proportionalHeight;
+            } else {
+                // After that, add to the column with smaller height
+                if (leftHeight <= rightHeight) {
+                    left.push(wallpaper);
+                    leftHeight += proportionalHeight;
+                } else {
+                    right.push(wallpaper);
+                    rightHeight += proportionalHeight;
+                }
+            }
+        });
+
+        setLeftWallpapers(left);
+        setRightWallpapers(right);
+    }, []);
+
     const handleFile = useCallback((file) => {
         if (!file || !file.type.startsWith("image/")) return;
-        const url = URL.createObjectURL(file);
-        setPreviewUrl(url);
-    }, []);
+
+        // Check file size (6 MB limit)
+        const maxSize = 6 * 1024 * 1024;
+        if (file.size > maxSize) {
+            alert("File size exceeds 6 MB limit");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const newWallpaper = {
+                    id: Date.now(),
+                    url: e.target.result,
+                    width: img.naturalWidth,
+                    height: img.naturalHeight,
+                };
+
+                const updatedWallpapers = [...wallpapers, newWallpaper];
+                setWallpapers(updatedWallpapers);
+                distributeWallpapers(updatedWallpapers);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }, [wallpapers, distributeWallpapers]);
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -57,17 +123,7 @@ const Upload = () => {
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                 >
-                    {previewUrl ? (
-                        <div className={Styles.previewWrapper}>
-                            <img
-                                src={previewUrl}
-                                alt="Selected wallpaper preview"
-                                className={Styles.previewImage}
-                            />
-                        </div>
-                    ) : (
-                        <>
-                            <div className={Styles.uploadContent}>
+                    <div className={Styles.uploadContent}>
                                 <div className={Styles.uploadIconWrapper}>
                                     <img
                                         src={UploadIconImg}
@@ -166,8 +222,6 @@ const Upload = () => {
                                     </div>
                                 </div>
                             </div>
-                        </>
-                    )}
 
                     <input
                         ref={fileInputRef}
@@ -182,14 +236,42 @@ const Upload = () => {
 
                 <div className={Styles.yourWalls}>
                     <h2 className={Styles.yourWallsTitle}>Your Walls</h2>
-                    <div className={Styles.yourWallsPlaceholder}>
-                        <p className={Styles.placeholderTitle}>
-                            This space is waiting to be personalized
-                        </p>
-                        <p className={Styles.placeholderSubtitle}>
-                            Upload your favorite wallpapers and bring it to life
-                        </p>
-                    </div>
+                    {wallpapers.length === 0 ? (
+                        <div className={Styles.yourWallsPlaceholder}>
+                            <p className={Styles.placeholderTitle}>
+                                This space is waiting to be personalized
+                            </p>
+                            <p className={Styles.placeholderSubtitle}>
+                                Upload your favorite wallpapers and bring it to life
+                            </p>
+                        </div>
+                    ) : (
+                        <div className={Styles.masonryGrid}>
+                            <div className={Styles.column}>
+                                {leftWallpapers.map((wallpaper) => (
+                                    <div key={wallpaper.id} className={Styles.wallpaperCard}>
+                                        <img
+                                            src={wallpaper.url}
+                                            alt="Wallpaper"
+                                            className={Styles.wallpaperImage}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className={Styles.column}>
+                                {rightWallpapers.map((wallpaper) => (
+                                    <div key={wallpaper.id} className={Styles.wallpaperCard}>
+                                        <img
+                                            src={wallpaper.url}
+                                            alt="Wallpaper"
+                                            className={Styles.wallpaperImage}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className={Styles.footerWrapper}>
