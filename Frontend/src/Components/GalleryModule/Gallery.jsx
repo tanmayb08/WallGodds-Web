@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-
 // LIGHT-ICONS
 import MobileIcon_light from "./GallaryAssets/mobile-light.svg";
 import TabletIcon_light from "./GallaryAssets/tablet-light.svg";
@@ -9,6 +8,7 @@ import LaptopIcon_light from "./GallaryAssets/laptop-light.svg";
 import MobileIcon_dark from "./GallaryAssets/mobile-dark.svg";
 import TabletIcon_dark from "./GallaryAssets/tablet-dark.svg";
 import LaptopIcon_dark from "./GallaryAssets/laptop-dark.svg";
+
 
 import Abstract from "./categorieItems/Abstract.svg";
 import Nature from "./categorieItems/Nature.svg";
@@ -31,6 +31,12 @@ import NavBar from "../CommonModule/NavBarModule/NavBar";
 import Footer from "../CommonModule/FooterModule/Footer";
 
 import Styles from "./Gallery.module.css";
+
+// const devices = [
+//   { id: "tablet", icon: TabletIcon, route: "/gallery/tablet" },
+//   { id: "desktop", icon: LaptopIcon, route: "/gallery/desktop" },
+//   { id: "mobile", icon: MobileIcon, route: "/gallery/mobile" },
+// ];
 
 const categories = [
   { title: "Abstract", image: Abstract },
@@ -120,7 +126,6 @@ const Gallery = () => {
 
   return (
     <>
-      {/* Single NavBar — already handles desktop + mobile via its own CSS */}
       <div className={Styles.navbarWrapper}>
         <NavBar />
       </div>

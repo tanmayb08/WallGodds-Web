@@ -33,8 +33,6 @@
   display: none;
 }
 
-/* ================= DESKTOP (UNCHANGED) ================= */
-
 .temp {
   display: flex;
   flex-direction: column;
@@ -110,7 +108,6 @@
   font-weight: 400;
 }
 
-/* Device Selector */
 .deviceSelector {
   display: flex;
   justify-content: center;
@@ -146,40 +143,30 @@
 @media (max-width: 768px) {
   .container {
     height: 100dvh;
-    /* locks viewport height (better than 100vh on mobile) */
     overflow: hidden;
-    /* prevents whole page scroll */
     display: flex;
     flex-direction: column;
     padding-top: 5.375rem;
-    /* keep your existing top spacing */
   }
 
   .temp {
     width: 97%;
     margin-bottom: 0.2rem;
-    /* slightly reduced */
     align-items: flex-start;
     padding: 0 0.75rem;
-    /* reduced side padding */
     box-sizing: border-box;
   }
 
   .scrollItems {
     height: 1.75rem;
-    /* reduced height */
     gap: 0.9rem;
-    /* tighter spacing */
     -webkit-overflow-scrolling: touch;
   }
 
   .categoryCard {
     min-width: 5.5rem;
-    /* reduced width */
     height: 1.75rem;
-    /* match new row height */
     border-radius: 0.8rem;
-    /* proportionally smaller */
   }
 
   .categoryCard::after {
@@ -188,7 +175,6 @@
 
   .categoryTitle {
     font-size: 0.7rem;
-    /* slightly smaller text */
     font-weight: 500;
   }
 
@@ -210,10 +196,8 @@
 
     flex: 1 1 auto;
     min-height: 0;
-    /* CRITICAL: allows it to scroll inside flex */
     width: 100%;
     overflow-y: auto;
-    /* vertical scroll here */
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
