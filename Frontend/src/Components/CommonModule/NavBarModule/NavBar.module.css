@@ -76,11 +76,11 @@
 }
 
 .github_arrow {
-    width: 6px;
-    height: 7.75px;
+    width: 9px;
+    height: 21.75px;
     position: absolute;
     top: 0;
-    right: 0;
+    right: -3px;
     flex-shrink: 0;
     transition:
         opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -427,7 +427,18 @@
         justify-content: space-between;
         align-items: center;
     }
-
+    .github_arrow {
+    width: 6px;
+    height: 7.75px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    flex-shrink: 0;
+    transition:
+        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        filter 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
     /* Reset Logo Growth (Fix layout shift) */
     .logo {
         flex: 0 0 auto !important;
